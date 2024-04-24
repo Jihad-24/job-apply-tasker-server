@@ -113,13 +113,28 @@ async function run() {
       res.send(result);
     });
 
-    // patch method for user to make admin
-    app.patch("/application/user/:id", async (req, res) => {
+    // patch method for status
+    app.patch("/application/status/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const updatedDoc = {
         $set: {
-          role: "Delivery Boy",
+          status: "complete",
+        },
+      };
+      const result = await applicationCollection.updateOne(filter, updatedDoc);
+      res.send(result);
+    });
+
+    // patch method for favorite
+    app.patch("/application/favorite/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateOrder = req.body;
+
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          favorite: updateOrder.favorite,
         },
       };
       const result = await applicationCollection.updateOne(filter, updatedDoc);
